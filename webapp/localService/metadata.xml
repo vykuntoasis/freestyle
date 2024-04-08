@@ -1,0 +1,1065 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="1.0" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns:sap="http://www.sap.com/Protocols/SAPData">
+    <edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Capabilities.V1.xml" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Alias="Capabilities" Namespace="Org.OData.Capabilities.V1"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/Common.xml" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Alias="Common" Namespace="com.sap.vocabularies.Common.v1"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Core.V1.xml" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Alias="Core" Namespace="Org.OData.Core.V1"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/UI.xml" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Alias="UI" Namespace="com.sap.vocabularies.UI.v1"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Validation.V1.xml" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Alias="Validation" Namespace="Org.OData.Validation.V1"/>
+    </edmx:Reference>
+    <edmx:DataServices m:DataServiceVersion="2.0">
+        <Schema Namespace="CatalogService" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+            <EntityContainer Name="EntityContainer" m:IsDefaultEntityContainer="true">
+                <EntitySet Name="BusinessPartnerSet" EntityType="CatalogService.BusinessPartnerSet"/>
+                <EntitySet Name="AddressSet" EntityType="CatalogService.AddressSet"/>
+                <EntitySet Name="EmployeeSet" EntityType="CatalogService.EmployeeSet"/>
+                <EntitySet Name="PurchaseOrderItems" EntityType="CatalogService.PurchaseOrderItems"/>
+                <FunctionImport Name="PurchaseOrderItems_draftPrepare" EntitySet="PurchaseOrderItems" ReturnType="CatalogService.PurchaseOrderItems" m:HttpMethod="POST" sap:action-for="CatalogService.PurchaseOrderItems">
+                    <Parameter Name="ID" Type="Edm.Guid" Nullable="false" Mode="In"/>
+                    <Parameter Name="IsActiveEntity" Type="Edm.Boolean" Nullable="false" Mode="In"/>
+                    <Parameter Name="SideEffectsQualifier" Type="Edm.String" Mode="In" Nullable="true"/>
+                </FunctionImport>
+                <EntitySet Name="POs" EntityType="CatalogService.POs"/>
+                <FunctionImport Name="POs_boost" m:HttpMethod="POST" sap:action-for="CatalogService.POs">
+                    <Parameter Name="ID" Type="Edm.Guid" Nullable="false" Mode="In"/>
+                    <Parameter Name="IsActiveEntity" Type="Edm.Boolean" Nullable="false" Mode="In"/>
+                </FunctionImport>
+                <FunctionImport Name="POs_largestOrder" EntitySet="POs" ReturnType="Collection(CatalogService.POs)" m:HttpMethod="GET" sap:action-for="CatalogService.POs">
+                    <Parameter Name="ID" Type="Edm.Guid" Nullable="false" Mode="In"/>
+                    <Parameter Name="IsActiveEntity" Type="Edm.Boolean" Nullable="false" Mode="In"/>
+                </FunctionImport>
+                <FunctionImport Name="POs_draftPrepare" EntitySet="POs" ReturnType="CatalogService.POs" m:HttpMethod="POST" sap:action-for="CatalogService.POs">
+                    <Parameter Name="ID" Type="Edm.Guid" Nullable="false" Mode="In"/>
+                    <Parameter Name="IsActiveEntity" Type="Edm.Boolean" Nullable="false" Mode="In"/>
+                    <Parameter Name="SideEffectsQualifier" Type="Edm.String" Mode="In" Nullable="true"/>
+                </FunctionImport>
+                <FunctionImport Name="POs_draftActivate" EntitySet="POs" ReturnType="CatalogService.POs" m:HttpMethod="POST" sap:action-for="CatalogService.POs">
+                    <Parameter Name="ID" Type="Edm.Guid" Nullable="false" Mode="In"/>
+                    <Parameter Name="IsActiveEntity" Type="Edm.Boolean" Nullable="false" Mode="In"/>
+                </FunctionImport>
+                <FunctionImport Name="POs_draftEdit" EntitySet="POs" ReturnType="CatalogService.POs" m:HttpMethod="POST" sap:action-for="CatalogService.POs">
+                    <Parameter Name="ID" Type="Edm.Guid" Nullable="false" Mode="In"/>
+                    <Parameter Name="IsActiveEntity" Type="Edm.Boolean" Nullable="false" Mode="In"/>
+                    <Parameter Name="PreserveChanges" Type="Edm.Boolean" Mode="In" Nullable="true"/>
+                </FunctionImport>
+                <EntitySet Name="ProductSet" EntityType="CatalogService.ProductSet"/>
+                <EntitySet Name="Currencies" EntityType="CatalogService.Currencies"/>
+                <EntitySet Name="DraftAdministrativeData" EntityType="CatalogService.DraftAdministrativeData"/>
+                <EntitySet Name="ProductSet_texts" EntityType="CatalogService.ProductSet_texts"/>
+                <EntitySet Name="Currencies_texts" EntityType="CatalogService.Currencies_texts"/>
+                <AssociationSet Name="BusinessPartnerSet_ADDRESS_GUID" Association="CatalogService.BusinessPartnerSet_ADDRESS_GUID">
+                    <End Role="BusinessPartnerSet" EntitySet="BusinessPartnerSet"/>
+                    <End Role="AddressSet" EntitySet="AddressSet"/>
+                </AssociationSet>
+                <AssociationSet Name="EmployeeSet_Currency" Association="CatalogService.EmployeeSet_Currency">
+                    <End Role="EmployeeSet" EntitySet="EmployeeSet"/>
+                    <End Role="Currencies" EntitySet="Currencies"/>
+                </AssociationSet>
+                <AssociationSet Name="PurchaseOrderItems_CURRENCY" Association="CatalogService.PurchaseOrderItems_CURRENCY">
+                    <End Role="PurchaseOrderItems" EntitySet="PurchaseOrderItems"/>
+                    <End Role="Currencies" EntitySet="Currencies"/>
+                </AssociationSet>
+                <AssociationSet Name="PurchaseOrderItems_PARENT_KEY" Association="CatalogService.PurchaseOrderItems_PARENT_KEY">
+                    <End Role="PurchaseOrderItems" EntitySet="PurchaseOrderItems"/>
+                    <End Role="POs" EntitySet="POs"/>
+                </AssociationSet>
+                <AssociationSet Name="PurchaseOrderItems_PRODUCT_GUID" Association="CatalogService.PurchaseOrderItems_PRODUCT_GUID">
+                    <End Role="PurchaseOrderItems" EntitySet="PurchaseOrderItems"/>
+                    <End Role="ProductSet" EntitySet="ProductSet"/>
+                </AssociationSet>
+                <AssociationSet Name="PurchaseOrderItems_DraftAdministrativeData" Association="CatalogService.PurchaseOrderItems_DraftAdministrativeData">
+                    <End Role="PurchaseOrderItems" EntitySet="PurchaseOrderItems"/>
+                    <End Role="DraftAdministrativeData" EntitySet="DraftAdministrativeData"/>
+                </AssociationSet>
+                <AssociationSet Name="PurchaseOrderItems_SiblingEntity" Association="CatalogService.PurchaseOrderItems_SiblingEntity">
+                    <End Role="PurchaseOrderItems" EntitySet="PurchaseOrderItems"/>
+                    <End Role="PurchaseOrderItems1" EntitySet="PurchaseOrderItems"/>
+                </AssociationSet>
+                <AssociationSet Name="POs_CURRENCY" Association="CatalogService.POs_CURRENCY">
+                    <End Role="POs" EntitySet="POs"/>
+                    <End Role="Currencies" EntitySet="Currencies"/>
+                </AssociationSet>
+                <AssociationSet Name="POs_PARTNER_GUID" Association="CatalogService.POs_PARTNER_GUID">
+                    <End Role="POs" EntitySet="POs"/>
+                    <End Role="BusinessPartnerSet" EntitySet="BusinessPartnerSet"/>
+                </AssociationSet>
+                <AssociationSet Name="POs_DraftAdministrativeData" Association="CatalogService.POs_DraftAdministrativeData">
+                    <End Role="POs" EntitySet="POs"/>
+                    <End Role="DraftAdministrativeData" EntitySet="DraftAdministrativeData"/>
+                </AssociationSet>
+                <AssociationSet Name="POs_SiblingEntity" Association="CatalogService.POs_SiblingEntity">
+                    <End Role="POs" EntitySet="POs"/>
+                    <End Role="POs1" EntitySet="POs"/>
+                </AssociationSet>
+                <AssociationSet Name="ProductSet_SUPPLIER_GUID" Association="CatalogService.ProductSet_SUPPLIER_GUID">
+                    <End Role="ProductSet" EntitySet="ProductSet"/>
+                    <End Role="BusinessPartnerSet" EntitySet="BusinessPartnerSet"/>
+                </AssociationSet>
+                <AssociationSet Name="ProductSet_texts_1" Association="CatalogService.ProductSet_texts_1">
+                    <End Role="ProductSet" EntitySet="ProductSet"/>
+                    <End Role="ProductSet_texts" EntitySet="ProductSet_texts"/>
+                </AssociationSet>
+                <AssociationSet Name="ProductSet_localized" Association="CatalogService.ProductSet_localized">
+                    <End Role="ProductSet" EntitySet="ProductSet"/>
+                    <End Role="ProductSet_texts" EntitySet="ProductSet_texts"/>
+                </AssociationSet>
+                <AssociationSet Name="Currencies_texts_1" Association="CatalogService.Currencies_texts_1">
+                    <End Role="Currencies" EntitySet="Currencies"/>
+                    <End Role="Currencies_texts" EntitySet="Currencies_texts"/>
+                </AssociationSet>
+                <AssociationSet Name="Currencies_localized" Association="CatalogService.Currencies_localized">
+                    <End Role="Currencies" EntitySet="Currencies"/>
+                    <End Role="Currencies_texts" EntitySet="Currencies_texts"/>
+                </AssociationSet>
+            </EntityContainer>
+            <EntityType Name="BusinessPartnerSet">
+                <Key>
+                    <PropertyRef Name="NODE_KEY"/>
+                </Key>
+                <Property Name="NODE_KEY" Type="Edm.String" MaxLength="32" Nullable="false"/>
+                <Property Name="BP_ROLE" Type="Edm.String" MaxLength="2"/>
+                <Property Name="EMAIL_ADDRESS" Type="Edm.String" MaxLength="105"/>
+                <Property Name="PHONE_NUMBER" Type="Edm.String" MaxLength="32"/>
+                <Property Name="FAX_NUMBER" Type="Edm.String" MaxLength="32"/>
+                <Property Name="WEB_ADDRESS" Type="Edm.String" MaxLength="44"/>
+                <NavigationProperty Name="ADDRESS_GUID" Relationship="CatalogService.BusinessPartnerSet_ADDRESS_GUID" FromRole="BusinessPartnerSet" ToRole="AddressSet"/>
+                <Property Name="ADDRESS_GUID_NODE_KEY" Type="Edm.String" MaxLength="32"/>
+                <Property Name="BP_ID" Type="Edm.String" MaxLength="32"/>
+                <Property Name="COMPANY_NAME" Type="Edm.String" MaxLength="250"/>
+            </EntityType>
+            <EntityType Name="AddressSet">
+                <Key>
+                    <PropertyRef Name="NODE_KEY"/>
+                </Key>
+                <Property Name="NODE_KEY" Type="Edm.String" MaxLength="32" Nullable="false"/>
+                <Property Name="CITY" Type="Edm.String" MaxLength="44"/>
+                <Property Name="POSTAL_CODE" Type="Edm.String" MaxLength="8"/>
+                <Property Name="STREET" Type="Edm.String" MaxLength="44"/>
+                <Property Name="BUILDING" Type="Edm.String" MaxLength="128"/>
+                <Property Name="COUNTRY" Type="Edm.String" MaxLength="44"/>
+                <Property Name="ADDRESS_TYPE" Type="Edm.String" MaxLength="44"/>
+                <Property Name="VAL_START_DATE" Type="Edm.DateTime" sap:display-format="Date"/>
+                <Property Name="VAL_END_DATE" Type="Edm.DateTime" sap:display-format="Date"/>
+                <Property Name="LATITUDE" Type="Edm.Decimal" sap:variable-scale="true"/>
+                <Property Name="LONGITUDE" Type="Edm.Decimal" sap:variable-scale="true"/>
+                <NavigationProperty Name="businesspartner" Relationship="CatalogService.BusinessPartnerSet_ADDRESS_GUID" FromRole="AddressSet" ToRole="BusinessPartnerSet"/>
+            </EntityType>
+            <EntityType Name="EmployeeSet">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="ID" Type="Edm.Guid" Nullable="false"/>
+                <Property Name="nameFirst" Type="Edm.String" MaxLength="40"/>
+                <Property Name="nameMiddle" Type="Edm.String" MaxLength="40"/>
+                <Property Name="nameLast" Type="Edm.String" MaxLength="40"/>
+                <Property Name="nameInitials" Type="Edm.String" MaxLength="40"/>
+                <Property Name="sex" Type="Edm.String" MaxLength="1"/>
+                <Property Name="language" Type="Edm.String" MaxLength="1"/>
+                <Property Name="phoneNumber" Type="Edm.String" MaxLength="30"/>
+                <Property Name="email" Type="Edm.String" MaxLength="255"/>
+                <Property Name="loginName" Type="Edm.String" MaxLength="12"/>
+                <NavigationProperty Name="Currency" Relationship="CatalogService.EmployeeSet_Currency" FromRole="EmployeeSet" ToRole="Currencies"/>
+                <Property Name="Currency_code" Type="Edm.String" MaxLength="3"/>
+                <Property Name="salaryAmount" Type="Edm.Decimal" Precision="10" Scale="2" sap:unit="CURRENCY_CODE"/>
+                <Property Name="accountNumber" Type="Edm.String" MaxLength="16"/>
+                <Property Name="bankId" Type="Edm.String" MaxLength="30"/>
+                <Property Name="bankName" Type="Edm.String" MaxLength="64"/>
+            </EntityType>
+            <EntityType Name="PurchaseOrderItems">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                    <PropertyRef Name="IsActiveEntity"/>
+                </Key>
+                <Property Name="ID" Type="Edm.Guid" Nullable="false"/>
+                <NavigationProperty Name="CURRENCY" Relationship="CatalogService.PurchaseOrderItems_CURRENCY" FromRole="PurchaseOrderItems" ToRole="Currencies"/>
+                <Property Name="CURRENCY_code" Type="Edm.String" MaxLength="3"/>
+                <Property Name="GROSS_AMOUNT" Type="Edm.Decimal" Precision="10" Scale="2" sap:unit="CURRENCY_CODE"/>
+                <Property Name="NET_AMOUNT" Type="Edm.Decimal" Precision="10" Scale="2" sap:unit="CURRENCY_CODE"/>
+                <Property Name="TAX_AMOUNT" Type="Edm.Decimal" Precision="10" Scale="2" sap:unit="CURRENCY_CODE"/>
+                <NavigationProperty Name="PARENT_KEY" Relationship="CatalogService.PurchaseOrderItems_PARENT_KEY" FromRole="PurchaseOrderItems" ToRole="POs"/>
+                <Property Name="PARENT_KEY_ID" Type="Edm.Guid"/>
+                <Property Name="PO_ITEM_POS" Type="Edm.Int32"/>
+                <NavigationProperty Name="PRODUCT_GUID" Relationship="CatalogService.PurchaseOrderItems_PRODUCT_GUID" FromRole="PurchaseOrderItems" ToRole="ProductSet"/>
+                <Property Name="PRODUCT_GUID_NODE_KEY" Type="Edm.String" MaxLength="32"/>
+                <Property Name="IsActiveEntity" Type="Edm.Boolean" Nullable="false"/>
+                <Property Name="HasActiveEntity" Type="Edm.Boolean" Nullable="false"/>
+                <Property Name="HasDraftEntity" Type="Edm.Boolean" Nullable="false"/>
+                <NavigationProperty Name="DraftAdministrativeData" Relationship="CatalogService.PurchaseOrderItems_DraftAdministrativeData" FromRole="PurchaseOrderItems" ToRole="DraftAdministrativeData"/>
+                <Property Name="DraftAdministrativeData_DraftUUID" Type="Edm.Guid"/>
+                <NavigationProperty Name="SiblingEntity" Relationship="CatalogService.PurchaseOrderItems_SiblingEntity" FromRole="PurchaseOrderItems" ToRole="PurchaseOrderItems1"/>
+            </EntityType>
+            <EntityType Name="POs">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                    <PropertyRef Name="IsActiveEntity"/>
+                </Key>
+                <Property Name="ID" Type="Edm.Guid" Nullable="false"/>
+                <NavigationProperty Name="CURRENCY" Relationship="CatalogService.POs_CURRENCY" FromRole="POs" ToRole="Currencies"/>
+                <Property Name="CURRENCY_code" Type="Edm.String" MaxLength="3"/>
+                <Property Name="GROSS_AMOUNT" Type="Edm.Decimal" Precision="10" Scale="2" sap:unit="CURRENCY_CODE"/>
+                <Property Name="NET_AMOUNT" Type="Edm.Decimal" Precision="10" Scale="2" sap:unit="CURRENCY_CODE"/>
+                <Property Name="TAX_AMOUNT" Type="Edm.Decimal" Precision="10" Scale="2" sap:unit="CURRENCY_CODE"/>
+                <Property Name="PO_ID" Type="Edm.String" MaxLength="40"/>
+                <NavigationProperty Name="PARTNER_GUID" Relationship="CatalogService.POs_PARTNER_GUID" FromRole="POs" ToRole="BusinessPartnerSet"/>
+                <Property Name="PARTNER_GUID_NODE_KEY" Type="Edm.String" MaxLength="32"/>
+                <Property Name="LIFECYCLE_STATUS" Type="Edm.String" MaxLength="1"/>
+                <Property Name="OVERALL_STATUS" Type="Edm.String" MaxLength="20"/>
+                <Property Name="NOTE" Type="Edm.String" MaxLength="45"/>
+                <NavigationProperty Name="Items" Relationship="CatalogService.PurchaseOrderItems_PARENT_KEY" FromRole="POs" ToRole="PurchaseOrderItems"/>
+                <Property Name="Crtiticality" Type="Edm.Int32"/>
+                <Property Name="IsActiveEntity" Type="Edm.Boolean" Nullable="false"/>
+                <Property Name="HasActiveEntity" Type="Edm.Boolean" Nullable="false"/>
+                <Property Name="HasDraftEntity" Type="Edm.Boolean" Nullable="false"/>
+                <NavigationProperty Name="DraftAdministrativeData" Relationship="CatalogService.POs_DraftAdministrativeData" FromRole="POs" ToRole="DraftAdministrativeData"/>
+                <Property Name="DraftAdministrativeData_DraftUUID" Type="Edm.Guid"/>
+                <NavigationProperty Name="SiblingEntity" Relationship="CatalogService.POs_SiblingEntity" FromRole="POs" ToRole="POs1"/>
+            </EntityType>
+            <EntityType Name="ProductSet">
+                <Key>
+                    <PropertyRef Name="NODE_KEY"/>
+                </Key>
+                <Property Name="NODE_KEY" Type="Edm.String" MaxLength="32" Nullable="false"/>
+                <Property Name="PRODUCT_ID" Type="Edm.String" MaxLength="28"/>
+                <Property Name="TYPE_CODE" Type="Edm.String" MaxLength="2"/>
+                <Property Name="CATEGORY" Type="Edm.String" MaxLength="32"/>
+                <Property Name="DESCRIPTION" Type="Edm.String" MaxLength="255"/>
+                <NavigationProperty Name="SUPPLIER_GUID" Relationship="CatalogService.ProductSet_SUPPLIER_GUID" FromRole="ProductSet" ToRole="BusinessPartnerSet"/>
+                <Property Name="SUPPLIER_GUID_NODE_KEY" Type="Edm.String" MaxLength="32"/>
+                <Property Name="TAX_TARIF_CODE" Type="Edm.Int32"/>
+                <Property Name="MEASURE_UNIT" Type="Edm.String" MaxLength="2"/>
+                <Property Name="WEIGHT_MEASURE" Type="Edm.Decimal" Precision="5" Scale="2"/>
+                <Property Name="WEIGHT_UNIT" Type="Edm.String" MaxLength="2"/>
+                <Property Name="CURRENCY_CODE" Type="Edm.String" MaxLength="4"/>
+                <Property Name="PRICE" Type="Edm.Decimal" Precision="15" Scale="2"/>
+                <Property Name="WIDTH" Type="Edm.Decimal" Precision="5" Scale="2"/>
+                <Property Name="DEPTH" Type="Edm.Decimal" Precision="5" Scale="2"/>
+                <Property Name="HEIGHT" Type="Edm.Decimal" Precision="5" Scale="2"/>
+                <Property Name="DIM_UNIT" Type="Edm.String" MaxLength="2"/>
+                <NavigationProperty Name="texts" Relationship="CatalogService.ProductSet_texts_1" FromRole="ProductSet" ToRole="ProductSet_texts"/>
+                <NavigationProperty Name="localized" Relationship="CatalogService.ProductSet_localized" FromRole="ProductSet" ToRole="ProductSet_texts"/>
+            </EntityType>
+            <EntityType Name="Currencies">
+                <Key>
+                    <PropertyRef Name="code"/>
+                </Key>
+                <Property Name="name" Type="Edm.String" MaxLength="255"/>
+                <Property Name="descr" Type="Edm.String" MaxLength="1000"/>
+                <Property Name="code" Type="Edm.String" MaxLength="3" Nullable="false"/>
+                <Property Name="symbol" Type="Edm.String" MaxLength="5"/>
+                <Property Name="minorUnit" Type="Edm.Int16"/>
+                <NavigationProperty Name="texts" Relationship="CatalogService.Currencies_texts_1" FromRole="Currencies" ToRole="Currencies_texts"/>
+                <NavigationProperty Name="localized" Relationship="CatalogService.Currencies_localized" FromRole="Currencies" ToRole="Currencies_texts"/>
+            </EntityType>
+            <EntityType Name="DraftAdministrativeData">
+                <Key>
+                    <PropertyRef Name="DraftUUID"/>
+                </Key>
+                <Property Name="DraftUUID" Type="Edm.Guid" Nullable="false"/>
+                <Property Name="CreationDateTime" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="CreatedByUser" Type="Edm.String" MaxLength="256"/>
+                <Property Name="DraftIsCreatedByMe" Type="Edm.Boolean"/>
+                <Property Name="LastChangeDateTime" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="LastChangedByUser" Type="Edm.String" MaxLength="256"/>
+                <Property Name="InProcessByUser" Type="Edm.String" MaxLength="256"/>
+                <Property Name="DraftIsProcessedByMe" Type="Edm.Boolean"/>
+            </EntityType>
+            <EntityType Name="ProductSet_texts">
+                <Key>
+                    <PropertyRef Name="locale"/>
+                    <PropertyRef Name="NODE_KEY"/>
+                </Key>
+                <Property Name="locale" Type="Edm.String" MaxLength="14" Nullable="false"/>
+                <Property Name="NODE_KEY" Type="Edm.String" MaxLength="32" Nullable="false"/>
+                <Property Name="DESCRIPTION" Type="Edm.String" MaxLength="255"/>
+            </EntityType>
+            <EntityType Name="Currencies_texts">
+                <Key>
+                    <PropertyRef Name="locale"/>
+                    <PropertyRef Name="code"/>
+                </Key>
+                <Property Name="locale" Type="Edm.String" MaxLength="14" Nullable="false"/>
+                <Property Name="name" Type="Edm.String" MaxLength="255"/>
+                <Property Name="descr" Type="Edm.String" MaxLength="1000"/>
+                <Property Name="code" Type="Edm.String" MaxLength="3" Nullable="false"/>
+            </EntityType>
+            <Association Name="BusinessPartnerSet_ADDRESS_GUID">
+                <End Role="BusinessPartnerSet" Type="CatalogService.BusinessPartnerSet" Multiplicity="0..1"/>
+                <End Role="AddressSet" Type="CatalogService.AddressSet" Multiplicity="0..1"/>
+                <ReferentialConstraint>
+                    <Principal Role="AddressSet">
+                        <PropertyRef Name="NODE_KEY"/>
+                    </Principal>
+                    <Dependent Role="BusinessPartnerSet">
+                        <PropertyRef Name="ADDRESS_GUID_NODE_KEY"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="EmployeeSet_Currency">
+                <End Role="EmployeeSet" Type="CatalogService.EmployeeSet" Multiplicity="*"/>
+                <End Role="Currencies" Type="CatalogService.Currencies" Multiplicity="0..1"/>
+                <ReferentialConstraint>
+                    <Principal Role="Currencies">
+                        <PropertyRef Name="code"/>
+                    </Principal>
+                    <Dependent Role="EmployeeSet">
+                        <PropertyRef Name="Currency_code"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="PurchaseOrderItems_CURRENCY">
+                <End Role="PurchaseOrderItems" Type="CatalogService.PurchaseOrderItems" Multiplicity="*"/>
+                <End Role="Currencies" Type="CatalogService.Currencies" Multiplicity="0..1"/>
+                <ReferentialConstraint>
+                    <Principal Role="Currencies">
+                        <PropertyRef Name="code"/>
+                    </Principal>
+                    <Dependent Role="PurchaseOrderItems">
+                        <PropertyRef Name="CURRENCY_code"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="PurchaseOrderItems_PARENT_KEY">
+                <End Role="PurchaseOrderItems" Type="CatalogService.PurchaseOrderItems" Multiplicity="*"/>
+                <End Role="POs" Type="CatalogService.POs" Multiplicity="0..1">
+                    <OnDelete Action="Cascade"/>
+                </End>
+            </Association>
+            <Association Name="PurchaseOrderItems_PRODUCT_GUID">
+                <End Role="PurchaseOrderItems" Type="CatalogService.PurchaseOrderItems" Multiplicity="*"/>
+                <End Role="ProductSet" Type="CatalogService.ProductSet" Multiplicity="0..1"/>
+                <ReferentialConstraint>
+                    <Principal Role="ProductSet">
+                        <PropertyRef Name="NODE_KEY"/>
+                    </Principal>
+                    <Dependent Role="PurchaseOrderItems">
+                        <PropertyRef Name="PRODUCT_GUID_NODE_KEY"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="PurchaseOrderItems_DraftAdministrativeData">
+                <End Role="PurchaseOrderItems" Type="CatalogService.PurchaseOrderItems" Multiplicity="*"/>
+                <End Role="DraftAdministrativeData" Type="CatalogService.DraftAdministrativeData" Multiplicity="0..1"/>
+                <ReferentialConstraint>
+                    <Principal Role="DraftAdministrativeData">
+                        <PropertyRef Name="DraftUUID"/>
+                    </Principal>
+                    <Dependent Role="PurchaseOrderItems">
+                        <PropertyRef Name="DraftAdministrativeData_DraftUUID"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="PurchaseOrderItems_SiblingEntity">
+                <End Role="PurchaseOrderItems" Type="CatalogService.PurchaseOrderItems" Multiplicity="*"/>
+                <End Role="PurchaseOrderItems1" Type="CatalogService.PurchaseOrderItems" Multiplicity="0..1"/>
+            </Association>
+            <Association Name="POs_CURRENCY">
+                <End Role="POs" Type="CatalogService.POs" Multiplicity="*"/>
+                <End Role="Currencies" Type="CatalogService.Currencies" Multiplicity="0..1"/>
+                <ReferentialConstraint>
+                    <Principal Role="Currencies">
+                        <PropertyRef Name="code"/>
+                    </Principal>
+                    <Dependent Role="POs">
+                        <PropertyRef Name="CURRENCY_code"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="POs_PARTNER_GUID">
+                <End Role="POs" Type="CatalogService.POs" Multiplicity="*"/>
+                <End Role="BusinessPartnerSet" Type="CatalogService.BusinessPartnerSet" Multiplicity="0..1"/>
+                <ReferentialConstraint>
+                    <Principal Role="BusinessPartnerSet">
+                        <PropertyRef Name="NODE_KEY"/>
+                    </Principal>
+                    <Dependent Role="POs">
+                        <PropertyRef Name="PARTNER_GUID_NODE_KEY"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="POs_DraftAdministrativeData">
+                <End Role="POs" Type="CatalogService.POs" Multiplicity="*"/>
+                <End Role="DraftAdministrativeData" Type="CatalogService.DraftAdministrativeData" Multiplicity="0..1"/>
+                <ReferentialConstraint>
+                    <Principal Role="DraftAdministrativeData">
+                        <PropertyRef Name="DraftUUID"/>
+                    </Principal>
+                    <Dependent Role="POs">
+                        <PropertyRef Name="DraftAdministrativeData_DraftUUID"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="POs_SiblingEntity">
+                <End Role="POs" Type="CatalogService.POs" Multiplicity="*"/>
+                <End Role="POs1" Type="CatalogService.POs" Multiplicity="0..1"/>
+            </Association>
+            <Association Name="ProductSet_SUPPLIER_GUID">
+                <End Role="ProductSet" Type="CatalogService.ProductSet" Multiplicity="*"/>
+                <End Role="BusinessPartnerSet" Type="CatalogService.BusinessPartnerSet" Multiplicity="0..1"/>
+                <ReferentialConstraint>
+                    <Principal Role="BusinessPartnerSet">
+                        <PropertyRef Name="NODE_KEY"/>
+                    </Principal>
+                    <Dependent Role="ProductSet">
+                        <PropertyRef Name="SUPPLIER_GUID_NODE_KEY"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="ProductSet_texts_1">
+                <End Role="ProductSet" Type="CatalogService.ProductSet" Multiplicity="1">
+                    <OnDelete Action="Cascade"/>
+                </End>
+                <End Role="ProductSet_texts" Type="CatalogService.ProductSet_texts" Multiplicity="*"/>
+            </Association>
+            <Association Name="ProductSet_localized">
+                <End Role="ProductSet" Type="CatalogService.ProductSet" Multiplicity="*"/>
+                <End Role="ProductSet_texts" Type="CatalogService.ProductSet_texts" Multiplicity="0..1"/>
+            </Association>
+            <Association Name="Currencies_texts_1">
+                <End Role="Currencies" Type="CatalogService.Currencies" Multiplicity="1">
+                    <OnDelete Action="Cascade"/>
+                </End>
+                <End Role="Currencies_texts" Type="CatalogService.Currencies_texts" Multiplicity="*"/>
+            </Association>
+            <Association Name="Currencies_localized">
+                <End Role="Currencies" Type="CatalogService.Currencies" Multiplicity="*"/>
+                <End Role="Currencies_texts" Type="CatalogService.Currencies_texts" Multiplicity="0..1"/>
+            </Association>
+            <Annotations Target="CatalogService.BusinessPartnerSet" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="UI.Identification">
+                    <Collection>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="COMPANY_NAME"/>
+                        </Record>
+                    </Collection>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="CatalogService.EntityContainer/BusinessPartnerSet" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Capabilities.InsertRestrictions">
+                    <Record Type="Capabilities.InsertRestrictionsType">
+                        <PropertyValue Property="Insertable" Bool="true"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="Capabilities.DeleteRestrictions">
+                    <Record Type="Capabilities.DeleteRestrictionsType">
+                        <PropertyValue Property="Deletable" Bool="false"/>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="CatalogService.BusinessPartnerSet/NODE_KEY" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="BP Key"/>
+            </Annotations>
+            <Annotations Target="CatalogService.BusinessPartnerSet/BP_ID" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Supplier Id"/>
+            </Annotations>
+            <Annotations Target="CatalogService.BusinessPartnerSet/COMPANY_NAME" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Supplier Name"/>
+            </Annotations>
+            <Annotations Target="CatalogService.EmployeeSet/ID" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Core.ComputedDefaultValue" Bool="true"/>
+            </Annotations>
+            <Annotations Target="CatalogService.EmployeeSet/sex" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Validation.AllowedValues">
+                    <Collection>
+                        <Record Type="Validation.AllowedValue">
+                            <Annotation Term="Core.SymbolicName" String="male"/>
+                            <PropertyValue Property="Value" String="M"/>
+                        </Record>
+                        <Record Type="Validation.AllowedValue">
+                            <Annotation Term="Core.SymbolicName" String="female"/>
+                            <PropertyValue Property="Value" String="F"/>
+                        </Record>
+                        <Record Type="Validation.AllowedValue">
+                            <Annotation Term="Core.SymbolicName" String="undisclosed"/>
+                            <PropertyValue Property="Value" String="U"/>
+                        </Record>
+                    </Collection>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="CatalogService.EmployeeSet/phoneNumber" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Validation.Pattern" String="^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$"/>
+            </Annotations>
+            <Annotations Target="CatalogService.EmployeeSet/email" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Validation.Pattern" String="^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$"/>
+            </Annotations>
+            <Annotations Target="CatalogService.EmployeeSet/Currency" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Currency"/>
+                <Annotation Term="Core.Description" String="Currency code as specified by ISO 4217"/>
+            </Annotations>
+            <Annotations Target="CatalogService.EmployeeSet/Currency_code" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Currency"/>
+                <Annotation Term="Common.ValueList">
+                    <Record Type="Common.ValueListType">
+                        <PropertyValue Property="Label" String="Currency"/>
+                        <PropertyValue Property="CollectionPath" String="Currencies"/>
+                        <PropertyValue Property="Parameters">
+                            <Collection>
+                                <Record Type="Common.ValueListParameterInOut">
+                                    <PropertyValue Property="LocalDataProperty" PropertyPath="Currency_code"/>
+                                    <PropertyValue Property="ValueListProperty" String="code"/>
+                                </Record>
+                                <Record Type="Common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="name"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="Core.Description" String="Currency code as specified by ISO 4217"/>
+            </Annotations>
+            <Annotations Target="CatalogService.PurchaseOrderItems" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="UI.LineItem">
+                    <Collection>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="PO_ITEM_POS"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="PRODUCT_GUID_NODE_KEY"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="PRODUCT_GUID/PRODUCT_ID"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="GROSS_AMOUNT"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="NET_AMOUNT"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="TAX_AMOUNT"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="CURRENCY_code"/>
+                        </Record>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="UI.HeaderInfo">
+                    <Record Type="UI.HeaderInfoType">
+                        <PropertyValue Property="TypeName" String="Item"/>
+                        <PropertyValue Property="TypeNamePlural" String="Items"/>
+                        <PropertyValue Property="Title">
+                            <Record Type="UI.DataField">
+                                <PropertyValue Property="Value" Path="NODE_KEY"/>
+                            </Record>
+                        </PropertyValue>
+                        <PropertyValue Property="Description">
+                            <Record Type="UI.DataField">
+                                <PropertyValue Property="Value" Path="PO_ITEM_POS"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="UI.Facets">
+                    <Collection>
+                        <Record Type="UI.ReferenceFacet">
+                            <PropertyValue Property="Target" AnnotationPath="@UI.FieldGroup#LineItemHeader"/>
+                            <PropertyValue Property="Label" String="More info"/>
+                        </Record>
+                        <Record Type="UI.ReferenceFacet">
+                            <PropertyValue Property="Target" AnnotationPath="@UI.FieldGroup#ProductDetails"/>
+                            <PropertyValue Property="Label" String="Product Info"/>
+                        </Record>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="UI.FieldGroup" Qualifier="LineItemHeader">
+                    <Record Type="UI.FieldGroupType">
+                        <PropertyValue Property="Data">
+                            <Collection>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="PO_ITEM_POS"/>
+                                </Record>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="PRODUCT_GUID_NODE_KEY"/>
+                                </Record>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="GROSS_AMOUNT"/>
+                                </Record>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="NET_AMOUNT"/>
+                                </Record>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="TAX_AMOUNT"/>
+                                </Record>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="CURRENCY_code"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="UI.FieldGroup" Qualifier="ProductDetails">
+                    <Record Type="UI.FieldGroupType">
+                        <PropertyValue Property="Data">
+                            <Collection>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="PRODUCT_GUID/PRODUCT_ID"/>
+                                </Record>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="PRODUCT_GUID/DESCRIPTION"/>
+                                </Record>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="PRODUCT_GUID/TYPE_CODE"/>
+                                </Record>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="PRODUCT_GUID/CATEGORY"/>
+                                </Record>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="PRODUCT_GUID/SUPPLIER_GUID/COMPANY_NAME"/>
+                                </Record>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="PRODUCT_GUID/TAX_TARIF_CODE"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="CatalogService.EntityContainer/PurchaseOrderItems" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.DraftNode">
+                    <Record Type="Common.DraftNodeType">
+                        <PropertyValue Property="PreparationAction" String="CatalogService.EntityContainer/PurchaseOrderItems_draftPrepare"/>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="CatalogService.PurchaseOrderItems/ID" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Core.ComputedDefaultValue" Bool="true"/>
+            </Annotations>
+            <Annotations Target="CatalogService.PurchaseOrderItems/CURRENCY" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Currency Code"/>
+                <Annotation Term="Core.Description" String="Currency code as specified by ISO 4217"/>
+            </Annotations>
+            <Annotations Target="CatalogService.PurchaseOrderItems/CURRENCY_code" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Currency Code"/>
+                <Annotation Term="Common.ValueList">
+                    <Record Type="Common.ValueListType">
+                        <PropertyValue Property="Label" String="Currency Code"/>
+                        <PropertyValue Property="CollectionPath" String="Currencies"/>
+                        <PropertyValue Property="Parameters">
+                            <Collection>
+                                <Record Type="Common.ValueListParameterInOut">
+                                    <PropertyValue Property="LocalDataProperty" PropertyPath="CURRENCY_code"/>
+                                    <PropertyValue Property="ValueListProperty" String="code"/>
+                                </Record>
+                                <Record Type="Common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="name"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="Core.Description" String="Currency code as specified by ISO 4217"/>
+            </Annotations>
+            <Annotations Target="CatalogService.PurchaseOrderItems/GROSS_AMOUNT" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Gross Amount"/>
+            </Annotations>
+            <Annotations Target="CatalogService.PurchaseOrderItems/NET_AMOUNT" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Net Amount"/>
+            </Annotations>
+            <Annotations Target="CatalogService.PurchaseOrderItems/TAX_AMOUNT" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Tax Amount"/>
+            </Annotations>
+            <Annotations Target="CatalogService.PurchaseOrderItems/PARENT_KEY" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Items Key"/>
+            </Annotations>
+            <Annotations Target="CatalogService.PurchaseOrderItems/PARENT_KEY_ID" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Items Key"/>
+            </Annotations>
+            <Annotations Target="CatalogService.PurchaseOrderItems/PO_ITEM_POS" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Item Position"/>
+            </Annotations>
+            <Annotations Target="CatalogService.PurchaseOrderItems/PRODUCT_GUID" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Product Id"/>
+            </Annotations>
+            <Annotations Target="CatalogService.PurchaseOrderItems/PRODUCT_GUID_NODE_KEY" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Text" Path="PRODUCT_GUID/DESCRIPTION"/>
+                <Annotation Term="Common.Label" String="Product Id"/>
+                <Annotation Term="Common.ValueList">
+                    <Record Type="Common.ValueListType">
+                        <PropertyValue Property="Label" String="Product Id"/>
+                        <PropertyValue Property="CollectionPath" String="ProductSet"/>
+                        <PropertyValue Property="Parameters">
+                            <Collection>
+                                <Record Type="Common.ValueListParameterInOut">
+                                    <PropertyValue Property="LocalDataProperty" PropertyPath="PRODUCT_GUID_NODE_KEY"/>
+                                    <PropertyValue Property="ValueListProperty" String="NODE_KEY"/>
+                                </Record>
+                                <Record Type="Common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="DESCRIPTION"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="CatalogService.PurchaseOrderItems/IsActiveEntity" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="UI.Hidden" Bool="true"/>
+            </Annotations>
+            <Annotations Target="CatalogService.PurchaseOrderItems/HasActiveEntity" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="UI.Hidden" Bool="true"/>
+            </Annotations>
+            <Annotations Target="CatalogService.PurchaseOrderItems/HasDraftEntity" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="UI.Hidden" Bool="true"/>
+            </Annotations>
+            <Annotations Target="CatalogService.PurchaseOrderItems/DraftAdministrativeData" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="UI.Hidden" Bool="true"/>
+            </Annotations>
+            <Annotations Target="CatalogService.PurchaseOrderItems/DraftAdministrativeData_DraftUUID" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="UI.Hidden" Bool="true"/>
+            </Annotations>
+            <Annotations Target="CatalogService.POs" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="UI.SelectionFields">
+                    <Collection>
+                        <PropertyPath>PO_ID</PropertyPath>
+                        <PropertyPath>GROSS_AMOUNT</PropertyPath>
+                        <PropertyPath>LIFECYCLE_STATUS</PropertyPath>
+                        <PropertyPath>CURRENCY_code</PropertyPath>
+                        <PropertyPath>PARTNER_GUID/COMPANY_NAME</PropertyPath>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="UI.LineItem">
+                    <Collection>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="PO_ID"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="GROSS_AMOUNT"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="OVERALL_STATUS"/>
+                            <PropertyValue Property="Criticality" Path="Crtiticality"/>
+                            <PropertyValue Property="CriticalityRepresentation" EnumMember="UI.CriticalityRepresentationType/WithIcon"/>
+                        </Record>
+                        <Record Type="UI.DataFieldForAction">
+                            <PropertyValue Property="Label" String="Boost"/>
+                            <PropertyValue Property="Action" String="CatalogService.boost"/>
+                            <PropertyValue Property="Inline" Bool="true"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="CURRENCY_code"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="PARTNER_GUID/COMPANY_NAME"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="PARTNER_GUID/ADDRESS_GUID/COUNTRY"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="TAX_AMOUNT"/>
+                        </Record>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="UI.HeaderInfo">
+                    <Record Type="UI.HeaderInfoType">
+                        <PropertyValue Property="TypeName" String="Purchase Order"/>
+                        <PropertyValue Property="TypeNamePlural" String="Purchase Orders"/>
+                        <PropertyValue Property="Title">
+                            <Record Type="UI.DataField">
+                                <PropertyValue Property="Label" String="Purchase Order Id"/>
+                                <PropertyValue Property="Value" Path="PO_ID"/>
+                            </Record>
+                        </PropertyValue>
+                        <PropertyValue Property="Description">
+                            <Record Type="UI.DataField">
+                                <PropertyValue Property="Label" String="Supplier"/>
+                                <PropertyValue Property="Value" Path="PARTNER_GUID/COMPANY_NAME"/>
+                            </Record>
+                        </PropertyValue>
+                        <PropertyValue Property="ImageUrl" String="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/SAP_2011_logo.svg/2560px-SAP_2011_logo.svg.png"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="UI.Facets">
+                    <Collection>
+                        <Record Type="UI.CollectionFacet">
+                            <PropertyValue Property="Label" String="Details"/>
+                            <PropertyValue Property="Facets">
+                                <Collection>
+                                    <Record Type="UI.ReferenceFacet">
+                                        <PropertyValue Property="Label" String="More Details"/>
+                                        <PropertyValue Property="Target" AnnotationPath="@UI.FieldGroup#AnubhavFields"/>
+                                    </Record>
+                                    <Record Type="UI.ReferenceFacet">
+                                        <PropertyValue Property="Label" String="Amounts"/>
+                                        <PropertyValue Property="Target" AnnotationPath="@UI.FieldGroup#SecondGroup"/>
+                                    </Record>
+                                </Collection>
+                            </PropertyValue>
+                        </Record>
+                        <Record Type="UI.ReferenceFacet">
+                            <PropertyValue Property="Label" String="Line Items"/>
+                            <PropertyValue Property="Target" AnnotationPath="Items/@UI.LineItem"/>
+                        </Record>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="UI.FieldGroup" Qualifier="SecondGroup">
+                    <Record Type="UI.FieldGroupType">
+                        <PropertyValue Property="Data">
+                            <Collection>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="GROSS_AMOUNT"/>
+                                </Record>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="NET_AMOUNT"/>
+                                </Record>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="TAX_AMOUNT"/>
+                                </Record>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="CURRENCY_code"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="UI.FieldGroup" Qualifier="AnubhavFields">
+                    <Record Type="UI.FieldGroupType">
+                        <PropertyValue Property="Data">
+                            <Collection>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="PO_ID"/>
+                                </Record>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="PARTNER_GUID_NODE_KEY"/>
+                                </Record>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="PARTNER_GUID/BP_ID"/>
+                                </Record>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="PARTNER_GUID/COMPANY_NAME"/>
+                                </Record>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="LIFECYCLE_STATUS"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="Common.Label" String="Purchase order"/>
+            </Annotations>
+            <Annotations Target="CatalogService.EntityContainer/POs" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.DraftRoot">
+                    <Record Type="Common.DraftRootType">
+                        <PropertyValue Property="ActivationAction" String="CatalogService.EntityContainer/POs_draftActivate"/>
+                        <PropertyValue Property="EditAction" String="CatalogService.EntityContainer/POs_draftEdit"/>
+                        <PropertyValue Property="PreparationAction" String="CatalogService.EntityContainer/POs_draftPrepare"/>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="CatalogService.POs/ID" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Core.ComputedDefaultValue" Bool="true"/>
+            </Annotations>
+            <Annotations Target="CatalogService.POs/CURRENCY" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Currency Code"/>
+                <Annotation Term="Core.Description" String="Currency code as specified by ISO 4217"/>
+            </Annotations>
+            <Annotations Target="CatalogService.POs/CURRENCY_code" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Currency Code"/>
+                <Annotation Term="Common.ValueList">
+                    <Record Type="Common.ValueListType">
+                        <PropertyValue Property="Label" String="Currency Code"/>
+                        <PropertyValue Property="CollectionPath" String="Currencies"/>
+                        <PropertyValue Property="Parameters">
+                            <Collection>
+                                <Record Type="Common.ValueListParameterInOut">
+                                    <PropertyValue Property="LocalDataProperty" PropertyPath="CURRENCY_code"/>
+                                    <PropertyValue Property="ValueListProperty" String="code"/>
+                                </Record>
+                                <Record Type="Common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="name"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="Core.Description" String="Currency code as specified by ISO 4217"/>
+            </Annotations>
+            <Annotations Target="CatalogService.POs/GROSS_AMOUNT" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Gross Amount"/>
+            </Annotations>
+            <Annotations Target="CatalogService.POs/NET_AMOUNT" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Net Amount"/>
+            </Annotations>
+            <Annotations Target="CatalogService.POs/TAX_AMOUNT" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Tax Amount"/>
+            </Annotations>
+            <Annotations Target="CatalogService.POs/PO_ID" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Purchase Order Id"/>
+            </Annotations>
+            <Annotations Target="CatalogService.POs/PARTNER_GUID" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Supplier Id"/>
+            </Annotations>
+            <Annotations Target="CatalogService.POs/PARTNER_GUID_NODE_KEY" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Text" Path="PARTNER_GUID/COMPANY_NAME"/>
+                <Annotation Term="Common.Label" String="Supplier Id"/>
+                <Annotation Term="Common.ValueList">
+                    <Record Type="Common.ValueListType">
+                        <PropertyValue Property="Label" String="Supplier Id"/>
+                        <PropertyValue Property="CollectionPath" String="BusinessPartnerSet"/>
+                        <PropertyValue Property="Parameters">
+                            <Collection>
+                                <Record Type="Common.ValueListParameterInOut">
+                                    <PropertyValue Property="LocalDataProperty" PropertyPath="PARTNER_GUID_NODE_KEY"/>
+                                    <PropertyValue Property="ValueListProperty" String="NODE_KEY"/>
+                                </Record>
+                                <Record Type="Common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="COMPANY_NAME"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="CatalogService.POs/LIFECYCLE_STATUS" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Status"/>
+            </Annotations>
+            <Annotations Target="CatalogService.POs/OVERALL_STATUS" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Core.Computed" Bool="true"/>
+            </Annotations>
+            <Annotations Target="CatalogService.POs/NOTE" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Notes!"/>
+            </Annotations>
+            <Annotations Target="CatalogService.POs/Items" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Purchase Order Items"/>
+            </Annotations>
+            <Annotations Target="CatalogService.POs/Crtiticality" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Core.Computed" Bool="true"/>
+            </Annotations>
+            <Annotations Target="CatalogService.POs/IsActiveEntity" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="UI.Hidden" Bool="true"/>
+            </Annotations>
+            <Annotations Target="CatalogService.POs/HasActiveEntity" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="UI.Hidden" Bool="true"/>
+            </Annotations>
+            <Annotations Target="CatalogService.POs/HasDraftEntity" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="UI.Hidden" Bool="true"/>
+            </Annotations>
+            <Annotations Target="CatalogService.POs/DraftAdministrativeData" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="UI.Hidden" Bool="true"/>
+            </Annotations>
+            <Annotations Target="CatalogService.POs/DraftAdministrativeData_DraftUUID" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="UI.Hidden" Bool="true"/>
+            </Annotations>
+            <Annotations Target="CatalogService.ProductSet" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="UI.Identification">
+                    <Collection>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="DESCRIPTION"/>
+                        </Record>
+                    </Collection>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="CatalogService.ProductSet/NODE_KEY" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Product Key"/>
+            </Annotations>
+            <Annotations Target="CatalogService.ProductSet/PRODUCT_ID" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Product Id"/>
+            </Annotations>
+            <Annotations Target="CatalogService.ProductSet/DESCRIPTION" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Product Name"/>
+            </Annotations>
+            <Annotations Target="CatalogService.ProductSet/SUPPLIER_GUID_NODE_KEY" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.ValueList">
+                    <Record Type="Common.ValueListType">
+                        <PropertyValue Property="Label" String="BusinessPartnerSet"/>
+                        <PropertyValue Property="CollectionPath" String="BusinessPartnerSet"/>
+                        <PropertyValue Property="Parameters">
+                            <Collection>
+                                <Record Type="Common.ValueListParameterInOut">
+                                    <PropertyValue Property="LocalDataProperty" PropertyPath="SUPPLIER_GUID_NODE_KEY"/>
+                                    <PropertyValue Property="ValueListProperty" String="NODE_KEY"/>
+                                </Record>
+                                <Record Type="Common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="COMPANY_NAME"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="CatalogService.Currencies" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="UI.Identification">
+                    <Collection>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="name"/>
+                        </Record>
+                    </Collection>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="CatalogService.Currencies/name" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Name"/>
+            </Annotations>
+            <Annotations Target="CatalogService.Currencies/descr" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Description"/>
+            </Annotations>
+            <Annotations Target="CatalogService.Currencies/code" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Text" Path="name"/>
+                <Annotation Term="Common.Label" String="Currency Code"/>
+            </Annotations>
+            <Annotations Target="CatalogService.Currencies/symbol" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Currency Symbol"/>
+            </Annotations>
+            <Annotations Target="CatalogService.Currencies/minorUnit" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Currency Minor Unit Fractions"/>
+            </Annotations>
+            <Annotations Target="CatalogService.DraftAdministrativeData" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Draft Administrative Data"/>
+            </Annotations>
+            <Annotations Target="CatalogService.DraftAdministrativeData/DraftUUID" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="UI.Hidden" Bool="true"/>
+                <Annotation Term="Common.Label" String="Draft (Technical ID)"/>
+                <Annotation Term="Core.ComputedDefaultValue" Bool="true"/>
+            </Annotations>
+            <Annotations Target="CatalogService.DraftAdministrativeData/CreationDateTime" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Draft Created On"/>
+            </Annotations>
+            <Annotations Target="CatalogService.DraftAdministrativeData/CreatedByUser" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Draft Created By"/>
+            </Annotations>
+            <Annotations Target="CatalogService.DraftAdministrativeData/DraftIsCreatedByMe" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="UI.Hidden" Bool="true"/>
+                <Annotation Term="Common.Label" String="Draft Created By Me"/>
+            </Annotations>
+            <Annotations Target="CatalogService.DraftAdministrativeData/LastChangeDateTime" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Draft Last Changed On"/>
+            </Annotations>
+            <Annotations Target="CatalogService.DraftAdministrativeData/LastChangedByUser" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Draft Last Changed By"/>
+            </Annotations>
+            <Annotations Target="CatalogService.DraftAdministrativeData/InProcessByUser" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Draft In Process By"/>
+            </Annotations>
+            <Annotations Target="CatalogService.DraftAdministrativeData/DraftIsProcessedByMe" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="UI.Hidden" Bool="true"/>
+                <Annotation Term="Common.Label" String="Draft In Process By Me"/>
+            </Annotations>
+            <Annotations Target="CatalogService.ProductSet_texts/locale" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Language Code"/>
+            </Annotations>
+            <Annotations Target="CatalogService.ProductSet_texts/NODE_KEY" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Product Key"/>
+            </Annotations>
+            <Annotations Target="CatalogService.ProductSet_texts/DESCRIPTION" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Product Name"/>
+            </Annotations>
+            <Annotations Target="CatalogService.Currencies_texts/locale" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Language Code"/>
+            </Annotations>
+            <Annotations Target="CatalogService.Currencies_texts/name" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Name"/>
+            </Annotations>
+            <Annotations Target="CatalogService.Currencies_texts/descr" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Description"/>
+            </Annotations>
+            <Annotations Target="CatalogService.Currencies_texts/code" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Text" Path="name"/>
+                <Annotation Term="Common.Label" String="Currency Code"/>
+            </Annotations>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>
